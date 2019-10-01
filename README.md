@@ -25,15 +25,23 @@ If `.env.$APP_ENV` does not exist, an exception will be thrown
 
 ```shell
 # .env.prod does not exist!
-$ APP_ENV=prod python
+$ APP_ENV=bogus python
 
 >>> import dotenv_switch
 
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "/home/mjb/src/experts/dotenv_switch/dotenv_switch/__init__.py", line 9, in <module>
-    load_dotenv(find_dotenv(filename=app_env_file, raise_error_if_not_found=True))
-  File "/home/mjb/.pyenv/versions/3.6.3/lib/python3.6/site-packages/dotenv/main.py", line 269, in find_dotenv
-    raise IOError('File not found')
-OSError: File not found
+  File "/home/mjb/src/experts/experts_dw/.venv/src/dotenv-switch/dotenv_switch/__init__.py", line 13, in <module>
+    raise DotenvSwitchFileNotFoundError(app_env_file)
+dotenv_switch.exceptions.DotenvSwitchFileNotFoundError: Dotenv file .env.bogus was not found
+```
+
+## Testing
+Pytest tests work by setting the active environment variable then importing the 
+library to cause it to be invoked. This requires tests each be run in separate 
+processes to avoid contaminating each other's environments or import state. Run 
+pytest with the `--forked` flag to achieve this.
+
+```shell
+$ poetry run pytest --forked
 ```
