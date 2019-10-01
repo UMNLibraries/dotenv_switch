@@ -6,4 +6,4 @@ from dotenv import load_dotenv, find_dotenv
 app_env_file = '.env.' + (getenv('APP_ENV') or 'test').lower()
 
 # Load the requested dotenv file
-load_dotenv(find_dotenv(filename=app_env_file, raise_error_if_not_found=True))
+load_dotenv(find_dotenv(filename=app_env_file, raise_error_if_not_found=True, usecwd=True))

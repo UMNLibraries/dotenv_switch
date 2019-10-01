@@ -12,3 +12,4 @@ python_dotenv = "^0.10.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
+pytest-forked = "*"
