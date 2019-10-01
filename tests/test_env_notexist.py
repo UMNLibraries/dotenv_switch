@@ -1,5 +1,4 @@
-import os
-import pytest
+import os, sys, pytest
 
 # Empty value for APP_ENV
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -7,8 +6,13 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 def test_dotenv_notexist():
     os.environ['APP_ENV'] = 'notexist'
 
-    # TODO: Improve this test to check the specific type of Exception
-    # The act of importing the exception from dotenv_switch may mess up the
-    # test environment. Fix it later....
-    with pytest.raises(Exception):
-        import dotenv_switch
+    with pytest.raises(Exception) as exinfo:
+        import dotenv_switch as ds
+
+    # This is a little unconventional - normal way to check the exception type
+    # would be inside the pytest.raises() directly, but to load that type into this
+    # scope means we would need to import it, and that messes up the execution environment
+    # setup by importing dotenv_switch as part of the process that has to throw
+    # the exception we test. Maybe there's a better way.
+    from dotenv_switch.exceptions import DotenvSwitchFileNotFoundError
+    assert exinfo.type == DotenvSwitchFileNotFoundError
