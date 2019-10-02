@@ -3,7 +3,7 @@ import os, sys, pytest
 # Empty value for APP_ENV
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
-def test_dotenv_notexist():
+def test_dotenv_notexist_not_required():
     os.environ['APP_ENV'] = 'notexist'
     import dotenv_switch
 
