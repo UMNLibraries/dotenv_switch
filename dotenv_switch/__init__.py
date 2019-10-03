@@ -1,4 +1,3 @@
-import sys
 from os import getenv
 from dotenv import load_dotenv, find_dotenv
 from dotenv_switch.exceptions import DotenvSwitchFileNotFoundError

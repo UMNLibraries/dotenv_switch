@@ -1,4 +1,4 @@
-import os, sys, pytest
+import os, pytest
 
 # Empty value for APP_ENV
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
