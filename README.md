@@ -28,12 +28,14 @@ be thrown.
 ### Automatic loading with REQUIRED config file
 
 Like basic automatic loading but if `.env.$APP_ENV` does not exist, an exception
-will be thrown""
+will be thrown
 
 ```shell
-# .env.prod does not exist!
+# .env.bogus does not exist!
 $ APP_ENV=bogus python
+```
 
+```python
 # Import the auto_required mode
 import dotenv_switch.auto_required
 
