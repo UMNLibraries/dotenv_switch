@@ -1,6 +1,6 @@
 # Python Dotenv Switch
 Enables switching between sourced `.env` files based on the environment defined
-in `$APP_ENV`.
+in `$APP_ENV`. E.g. if `$APP_ENV=prod`, load `.env.prod`
 
 ## Usage
 
@@ -22,6 +22,7 @@ import dotenv_switch.auto
 os.getenv('A_VARIABLE')
 >> itsvalue
 ```
+
 If `.env.$APP_ENV` does not exist, variables will be empty but no exception will
 be thrown.
 
