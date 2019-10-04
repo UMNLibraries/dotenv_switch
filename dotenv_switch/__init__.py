@@ -8,8 +8,18 @@ def env_file(var='APP_ENV', default_env='test'):
 
 # Load the requested dotenv file
 # Throw an exception if required but not found
-def load(var='APP_ENV', default_env='test', required=False):
+def load(var='APP_ENV', default_env='test', required=False, lazy=False):
     try:
-        load_dotenv(find_dotenv(filename=env_file(var, default_env), raise_error_if_not_found=required, usecwd=True))
+        return load_dotenv(find_dotenv(filename=env_file(var, default_env), raise_error_if_not_found=True, usecwd=True))
     except IOError:
-        raise DotenvSwitchFileNotFoundError(env_file())
+        if lazy:
+            try:
+                return load_dotenv(find_dotenv(filename='.env', raise_error_if_not_found=True, usecwd=True))
+            except IOError:
+                pass
+
+        if required:
+            raise DotenvSwitchFileNotFoundError(env_file())
+
+        # Effectively return an empty DotEnv for consistency
+        return load_dotenv()
