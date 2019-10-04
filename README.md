@@ -47,6 +47,21 @@ Traceback (most recent call last):
 dotenv_switch.exceptions.DotenvSwitchFileNotFoundError: Dotenv file .env.bogus was not found
 ```
 
+### Automatic loading with fallback to plain `.env`
+If `.env.$APP_ENV` does not exist, using `dotenv_switch.auto_lazy` will allow it
+to fall back to a plain `.env` that may already exist.
+
+```python
+# .env.bogus does not exist
+# but .env does!
+
+import os
+
+# Simply import the auto mode
+import dotenv_switch.auto_lazy
+```
+
+
 ### Advanced usage
 Rather than auto mode accepting defaults for the environment variable to consult
 and the default environment if unset, you may set these options.
@@ -72,6 +87,9 @@ dotenv_switch.load(var='OTHER_ENV', default_env='dev')
 
 # Same, but also throw an exception if .env.dev does not exist
 dotenv_switch.load(var='OTHER_ENV', default_env='dev', required=True)
+
+# Fall back to a plain .env file if the requested APP_ENV does not exist
+dotenv_switch.load(lazy=True)
 ```
 
 ## Testing
