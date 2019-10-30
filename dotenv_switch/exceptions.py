@@ -1,4 +1,6 @@
-class DotenvSwitchFileNotFoundError(Exception):
+import errno
+import os
+
+class DotenvSwitchFileNotFoundError(FileNotFoundError):
     def __init__(self, filename):
-        self.message = f"Dotenv file {filename} was not found"
-        super().__init__(self.message)
+        super().__init__(errno.ENOENT, os.strerror(errno.ENOENT), filename)
