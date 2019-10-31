@@ -9,7 +9,7 @@ for env_var in (ds.default_var, test_var):
 
 def test_no_dotenv_files():
     ds.load()
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
 
 def test_dotenv_only(create_dotenv_files, delete_dotenv_files):
     dotenv_file_metadata = {
@@ -47,5 +47,5 @@ def test_dotenv_foo_only(create_dotenv_files, delete_dotenv_files):
     }
     dotenv_files = create_dotenv_files(pathlib.Path.cwd(), dotenv_file_metadata)
     ds.load(override=True)
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
     delete_dotenv_files(dotenv_files)

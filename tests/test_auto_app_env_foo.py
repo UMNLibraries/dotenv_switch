@@ -9,7 +9,7 @@ os.environ['APP_ENV'] = 'foo'
 
 def test_no_dotenv_files():
     import dotenv_switch.auto
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
 
 def test_dotenv_only(create_dotenv_files, delete_dotenv_files):
     if test_var in os.environ:

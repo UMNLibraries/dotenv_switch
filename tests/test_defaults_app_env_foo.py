@@ -10,7 +10,7 @@ os.environ[ds.default_var] = 'foo'
 
 def test_no_dotenv_files():
     ds.load()
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
 
 def test_dotenv_only(create_dotenv_files, delete_dotenv_files):
     dotenv_file_metadata = {

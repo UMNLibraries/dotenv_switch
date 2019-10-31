@@ -8,7 +8,7 @@ for env_var in ('APP_ENV', test_var):
 
 def test_no_dotenv_files():
     import dotenv_switch.auto
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
 
 def test_dotenv_only(create_dotenv_files, delete_dotenv_files):
     if test_var in os.environ:
@@ -54,5 +54,5 @@ def test_dotenv_foo_only(create_dotenv_files, delete_dotenv_files):
     }
     dotenv_files = create_dotenv_files(pathlib.Path.cwd(), dotenv_file_metadata)
     import dotenv_switch.auto
-    assert os.getenv(test_var) == None
+    assert os.getenv(test_var) is None
     delete_dotenv_files(dotenv_files)
