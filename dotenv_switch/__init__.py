@@ -3,9 +3,14 @@ from pathlib import PurePath
 from dotenv import load_dotenv, find_dotenv
 from dotenv_switch.exceptions import DotenvSwitchFileNotFoundError
 
+default_var = 'APP_ENV'
+default_fallbacks = ['.env.test', '.env']
+default_required = False
+default_usecwd = False
+
 # Load the requested dotenv file
 # Throw an exception if required but not found
-def load(var='APP_ENV', fallbacks=['.env.test', '.env'], required=False, usecwd=False, **kwargs):
+def load(var=default_var, fallbacks=default_fallbacks, required=default_required, usecwd=default_usecwd, **kwargs):
 
     filenames = fallbacks.copy()
     if isinstance(var, str) and getenv(var):
