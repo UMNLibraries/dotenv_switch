@@ -1,5 +1,26 @@
-import pytest
 import os
+import pathlib
+import pytest
+
+def remove_dotenv_files():
+    for dotenv_file in pathlib.Path.cwd().glob('.env.*'):
+        dotenv_file.unlink()
+    dotenv = pathlib.Path.cwd() / '.env'
+    if dotenv.exists():
+        dotenv.unlink()
+
+def remove_env_vars():
+    for env_var in ('APP_ENV', 'MY_ENV', 'TEST_VAR'):
+        if env_var in os.environ:
+            os.environ.pop(env_var)
+
+def pytest_runtest_setup(item):
+    remove_dotenv_files()
+    remove_env_vars()
+
+def pytest_runtest_teardown(item):
+    remove_dotenv_files()
+    remove_env_vars()
 
 @pytest.fixture()
 def create_dotenv_files():
@@ -12,11 +33,3 @@ def create_dotenv_files():
             dotenv_files.append(dotenv_file)
         return dotenv_files
     return _create_dotenv_files
-
-@pytest.fixture()
-def delete_dotenv_files():
-    def _delete_dotenv_files(dotenv_files):
-        for dotenv_file in dotenv_files:
-            dotenv_file.unlink()
-    return _delete_dotenv_files
-
