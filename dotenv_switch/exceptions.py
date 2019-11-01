@@ -7,4 +7,4 @@ class DotenvSwitchFileNotFoundError(FileNotFoundError):
 
 class DotenvSwitchUnspecifiedFilesRequiredError(ValueError):
     def __init__(self):
-        super().__init__('dotenv file required but no dovenv filenames specified')
+        super().__init__('dotenv file required but no dotenv filenames specified')
