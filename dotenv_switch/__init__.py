@@ -37,4 +37,4 @@ def load(var=default_var, fallbacks=default_fallbacks, required=default_required
     if required:
         raise DotenvSwitchFileNotFoundError(filenames_not_found)
     # effectively return an empty dotenv for consistency
-    return load_dotenv()
+    return load_dotenv(**kwargs)
