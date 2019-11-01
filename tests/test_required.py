@@ -1,5 +1,4 @@
 import os
-import pathlib
 import pytest
 import dotenv_switch as ds
 from dotenv_switch.exceptions import DotenvSwitchFileNotFoundError
@@ -15,6 +14,6 @@ def test_dotenv_exists(create_dotenv_files):
     dotenv_file_metadata = {
         '.env.foo': {test_var: 'dotenv foo'},
     }
-    dotenv_files = create_dotenv_files(pathlib.Path.cwd(), dotenv_file_metadata)
+    dotenv_files = create_dotenv_files(dotenv_file_metadata)
     ds.load(required=True)
     assert os.getenv(test_var) == dotenv_file_metadata['.env.foo'][test_var]

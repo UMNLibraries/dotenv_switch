@@ -1,5 +1,4 @@
 import os
-import pathlib
 import pytest
 import dotenv_switch as ds
 from dotenv_switch.exceptions import DotenvSwitchUnspecifiedFilesRequiredError
