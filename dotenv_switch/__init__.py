@@ -25,7 +25,7 @@ def load(var=default_var, fallbacks=default_fallbacks, required=default_required
     usecwd : bool, optional
         dotenv.find_dotenv() param, with the same default, which will be
         passed to that function (default is False)
-    **kwargs
+    **kwargs : optional
         any remaining params will be passed to dotenv.load_dotenv()
         
     Raises

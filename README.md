@@ -1,99 +1,86 @@
 # Python Dotenv Switch
-Enables switching between sourced `.env` files based on the environment defined
-in `$APP_ENV`. E.g. if `$APP_ENV=prod`, load `.env.prod`
+
+Wraps [python-dotenv](https://pypi.org/project/python-dotenv/) to enable
+switching among multiple, environment-specific `.env` files.
 
 ## Usage
 
-### Basic automatic loading
-Basic automatic usage in Python - ensure the `$APP_ENV` environment variable is
-set and a corresponding `.env.$APP_ENV` file exists.
+### Quick start
 
-If not set or empty, `$APP_ENV` defaults to `test`.
+The fastest, easiest way to use `dotenv_switch` is to use the `auto` mode to
+automatically load dotenv files upon import: `import dotenv_switch.auto`
+
+Example:
 
 ```python
 # Assuming $APP_ENV=prod and .env.prod contains
 # A_VARIABLE=itsvalue
 
-import os
-
-# Simply import the auto mode
 import dotenv_switch.auto
 
+import os
 os.getenv('A_VARIABLE')
 >> itsvalue
 ```
 
-If `.env.$APP_ENV` does not exist, variables will be empty but no exception will
-be thrown.
+The `auto` mode accepts all defaults:
 
-### Automatic loading with REQUIRED config file
+* `APP_ENV` is the name of the environment variable that specifies the
+  application environment.
+* Load `.env.$APP_ENV` if it exists.
+* If `.env.$APP_ENV` does not exist, fallback to loading `.env.test`, or if that
+  doesn't exist, `.env`.
+* If none of the above files exist, return successfully and raise no errors/exceptions.
 
-Like basic automatic loading but if `.env.$APP_ENV` does not exist, an exception
-will be thrown
+For instructions on overriding the defaults, see [API](#api).
 
-```shell
-# .env.bogus does not exist!
-$ APP_ENV=bogus python
-```
+### API
 
-```python
-# Import the auto_required mode
-import dotenv_switch.auto_required
+#### load()
 
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/home/mjb/src/experts/experts_dw/.venv/src/dotenv-switch/dotenv_switch/__init__.py", line 13, in <module>
-    raise DotenvSwitchFileNotFoundError(app_env_file)
-dotenv_switch.exceptions.DotenvSwitchFileNotFoundError: Dotenv file .env.bogus was not found
-```
+    import dotenv_switch
+    dotenv_switch.load(var='APP_ENV', fallbacks=['.env.test','.env'], required=False, usecwd=False, **kwargs)
 
-### Automatic loading with fallback to plain `.env`
-If `.env.$APP_ENV` does not exist, using `dotenv_switch.auto_lazy` will allow it
-to fall back to a plain `.env` that may already exist.
+Parameters:
 
-```python
-# .env.bogus does not exist
-# but .env does!
+* `var` (str, optional) name of the env var specifying the desired environemnt (default is `APP_ENV`)
+* `fallbacks` (list, optional) list of dotenv filenames to use if `var` is `None` or `.env.{var}` is
+  not found (default is `['.env.test','.env']`)
+* `required` (bool, optional) whether to raise an exception if no dotenv file is found (default is `False`)
+* `usecwd` (bool, optional) `dotenv.find_dotenv()` param, with the same default, which will be
+  passed to that function (default is `False`)
+* `**kwargs` (optional) any remaining params will be passed to `dotenv.load_dotenv()`
 
-import os
+Raises:
 
-# Simply import the auto mode
-import dotenv_switch.auto_lazy
-```
+* `DotenvSwitchUnspecifiedFilesRequiredError` If required is `True`, but `var` is `None` or
+  `.env.{var}` cannot be found, and fallbacks is `None` or empty.
+* `DotenvSwitchFileNotFoundError` If `required` is `True` but no dotenv file can be found.
 
+Returns
 
-### Advanced usage
-Rather than auto mode accepting defaults for the environment variable to consult
-and the default environment if unset, you may set these options.
+* `DotEnv`, the object returned by `dotenv.loadenv()`.
 
-```shell
-# Assuming var $MY_ENV=stage is set and .env.stage contains
-A_VARIABLE="staging variable"
-```
+#### Package defaults
 
-```python
-import os
+The default values of [load](#load) parameters are specified by these package variables:
 
-# Load the module (not auto mode)
-import dotenv_switch
+    default_var = 'APP_ENV'
+    default_fallbacks = ['.env.test', '.env']
+    default_required = False
+    default_usecwd = False
 
-# Tell dotenv_switch to read the environment from $MY_ENV
-dotenv_switch.load(var='MY_ENV')
-os.getenv('A_VARIABLE')
->>> "staging variable"
+Resetting these package variables is another way to customize the behavior of `load()`.
 
-# Tell dotenv_switch to read from $OTHER_ENV and if not set, default to .env.dev
-dotenv_switch.load(var='OTHER_ENV', default_env='dev')
+#### auto modes
 
-# Same, but also throw an exception if .env.dev does not exist
-dotenv_switch.load(var='OTHER_ENV', default_env='dev', required=True)
-
-# Fall back to a plain .env file if the requested APP_ENV does not exist
-dotenv_switch.load(lazy=True)
-```
+`dotenv_switch.auto` just calls `dotenv_switch.load()` after importing the package.
+Overriding `load()` parameters and/or resetting package variable defaults allows for
+easy creation of custom auto modes for convenient, one-line importing and loading.
 
 ## Testing
-Pytest tests work by setting the active environment variable then importing the
+
+Pytest tests work by setting the active environment variable, then importing the
 library to cause it to be invoked. This requires tests each be run in separate
 processes to avoid contaminating each other's environments or import state. Run
 pytest with the `--forked` flag to achieve this.
