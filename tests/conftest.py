@@ -40,7 +40,7 @@ def pytest_runtest_setup(item):
     remove_dotenv_files()
     remove_env_vars()
 
-def pytest_runtest_teardown(item):
+def pytest_runtest_teardown(item, nextitem):
     '''Post-test cleanup of dotenv files and env vars
 
     We do this here rather than in test functions because, if an
