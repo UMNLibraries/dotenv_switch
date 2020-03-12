@@ -80,11 +80,6 @@ easy creation of custom auto modes for convenient, one-line importing and loadin
 
 ## Testing
 
-Pytest tests work by setting the active environment variable, then importing the
-library to cause it to be invoked. This requires tests each be run in separate
-processes to avoid contaminating each other's environments or import state. Run
-pytest with the `--forked` flag to achieve this.
-
 ```shell
-$ poetry run pytest --forked
+$ poetry run pytest
 ```

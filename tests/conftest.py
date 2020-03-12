@@ -40,7 +40,7 @@ def pytest_runtest_setup(item):
     remove_dotenv_files()
     remove_env_vars()
 
-def pytest_runtest_teardown(item):
+def pytest_runtest_teardown(item, nextitem):
     '''Post-test cleanup of dotenv files and env vars
 
     We do this here rather than in test functions because, if an
@@ -67,9 +67,10 @@ def create_dotenv_files():
     def _create_dotenv_files(dotenv_file_metadata={}):
         dotenv_files = []
         for dotenv_filename, env_vars in dotenv_file_metadata.items():
-            dotenv_file = pathlib.Path.cwd() / dotenv_filename 
-            for k, v in env_vars.items():
-                dotenv_file.write_text(f'{k}="{v}"\n')
+            dotenv_filepath = pathlib.Path.cwd() / dotenv_filename 
+            with dotenv_filepath.open('a') as dotenv_file:
+                for k, v in env_vars.items():
+                    dotenv_file.write(f'{k}="{v}"\n')
             dotenv_files.append(dotenv_file)
         return dotenv_files
     return _create_dotenv_files
