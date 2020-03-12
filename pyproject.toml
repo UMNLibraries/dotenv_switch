@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dotenv_switch"
-version = "0.1.0"
+version = "0.1.1"
 description = "Switch between sourcing .env files based on $APP_ENV environment variable"
 readme = "README.md"
 authors = ["Michael Berkowski <mjb@umn.edu>", "David Naughton <naughton@umn.edu>"]
